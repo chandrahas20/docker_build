@@ -44,3 +44,14 @@ jobs:
       - name: show images
         run: |
           docker images
+      - name: Tag Docker image
+        run: docker tag $DOCKER_IMAGE_NAME:$DOCKER_TAG harikapilli/githubactions:$DOCKER_TAG
+
+      - name: Docker Hub Login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+      
+      - name: Push Docker image
+        run: docker push harikapilli/githubactions:$DOCKER_TAG
